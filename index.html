@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Downloader</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #result {
+            margin-top: 20px;
+        }
+        a {
+            text-decoration: none;
+            color: #007bff;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .error {
+            color: red;
+        }
+        footer {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #666;
+        }
+        footer a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Instagram Downloader</h1>
+    <p>Enter the Instagram post or reel URL below to download content:</p>
+    <input type="text" id="url" placeholder="Paste Instagram URL here">
+    <button onclick="fetchDownloadLink()">Download</button>
+    <div id="result"></div>
+
+    <footer>
+        <p>Created by <a href="#" target="_blank">The Name is Enough</a>. All rights reserved.</p>
+    </footer>
+
+    <script>
+        async function fetchDownloadLink() {
+            const urlInput = document.getElementById('url').value;
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = ""; // Clear previous results
+
+            if (!urlInput) {
+                resultDiv.innerHTML = `<p class="error">Please enter a valid URL.</p>`;
+                return;
+            }
+
+            const apiUrl = `https://instadl.us.kg/download/${encodeURIComponent(urlInput)}`;
+
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+
+                if (data.download_url) {
+                    resultDiv.innerHTML = `
+                        <p>Download your content below:</p>
+                        <a href="${data.download_url}" target="_blank">Click here to download</a>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `<p class="error">Error: Could not fetch the download link. Try again later.</p>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<p class="error">Error: ${error.message}</p>`;
+            }
+        }
+    </script>
+</body>
+</html>
